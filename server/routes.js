@@ -3,7 +3,7 @@
 var clusterController = require('./controllers/cluster');
 var serviceController = require('./controllers/service');
 var TChannel = require('tchannel');
-var HashRing = require('ringpop/lib/ring.js');
+var HashRing = require('ringpop/lib/ring');
 var async = require('async');
 var dns = require('dns');
 var log = require('./util/logger');
@@ -308,7 +308,7 @@ function getAdminStatsFinishedMembership(req, res, membership, services) {
             }
             var membershipObject = JSON.parse(res2);
             writeToMembership();
-            async.mapLimit(membershipObject.ring, 5, dnsResolution.bind(membershipObject), function(err) {
+            async.mapLimit(membershipObject.ring.servers, 5, dnsResolution.bind(membershipObject), function(err) {
                 if (err) {
                     res.end(JSON.stringify(membershipObject));
                     return;
@@ -388,8 +388,7 @@ function calculateHashPortions(members) {
 
     while (hashCode < 4294967295) {
         var iter = hashRing.rbtree.upperBound(hashCode);
-
-        if (iter.val() === null) {
+        if (iter.value() === null) {
             break;
         }
 
@@ -528,9 +527,10 @@ function writeServices(req, res) {
     log('Enter write services controller');
     var key = "services";
     RedisClient.getV_CB2(req, res, key, function cb(req2, res2, services) {
-        if (!services) {
+        if (!services || services === 'null') {
             services = [];
         }
+
         serviceController.writeServices(req2, res2, services, function (err, updatedServices, message) {
             services = updatedServices;
             RedisClient.setKV2(key,JSON.stringify(services));

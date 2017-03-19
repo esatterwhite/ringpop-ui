@@ -40,12 +40,8 @@
     "lodash": "^3.10.0",
     "react": "^0.13.3",
     "redis": "^0.12.1",
-    "ringpop": "^9.8.22",
-<<<<<<< HEAD
-    "tchannel": "^1.3.2"
-=======
-    "tchannel": "~2.5.1"
->>>>>>> b27d69f23849db9b17454f99ff8c04ef2df5fd4a
+    "ringpop": "^10.16.2",
+    "tchannel": "^3.9.9"
   },
   "devDependencies": {
     "browserify": "^10.2.4",

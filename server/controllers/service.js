@@ -14,7 +14,7 @@ function writeServices(req, res, services, cb) {
     var datacenters = req.body.datacenters;
     var addresses = req.body.addresses;
 
-    log('Enter service controller - write');
+    console.log('Enter service controller - write', services);
     if (JSON.stringify(services) === '[]') {
         services = [];
     } else {

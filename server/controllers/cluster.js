@@ -162,13 +162,12 @@ function lookup(req, res) {
       
 
     subChan.waitForIdentified({host: instanceAddress}, function onIdentified() {
-        subChan.request({hasNoParent: true, serviceName: 'ringpop', timeout: 30000}).send("/admin/stats", null, key, function (err, res1, res2) {
-
+        subChan.request({hasNoParent: true, serviceName: 'ringpop', timeout: 30000}).send("/admin/lookup", null, JSON.stringify({key:key}), function (err, res1, res2, res3) {
           if (err) {
               return res.send({message: 'There was an error while looking up this key: '+JSON.stringify(err)});
           }
           client.close();
-          return res.send(JSON.parse(res2));
+          return res.send(JSON.parse(res3));
         });
     });
 
